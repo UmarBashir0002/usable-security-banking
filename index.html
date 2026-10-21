@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1324" />
+  <title>ClearGate — Usable Security Banking Prototype</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    :root{--bg:#0b1324;--panel:#111d32;--panel2:#16243a;--line:#263952;--muted:#91a2bb;--text:#edf4ff;--teal:#58e0c0;--blue:#79a9ff;--amber:#f4c36b;--red:#ff8589}
+    *{box-sizing:border-box} body{margin:0;background:radial-gradient(900px 520px at 85% -15%,#183458 0%,transparent 60%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    button,input{font:inherit} button{cursor:pointer} button:disabled{opacity:.5;cursor:not-allowed} :focus-visible{outline:3px solid #91bdff;outline-offset:3px}
+    .shell{max-width:1180px;margin:0 auto;padding:24px 20px 46px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:28px}.brand{display:flex;align-items:center;gap:11px}.brand-mark{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(145deg,#69e5c3,#5e9eff);color:#0c1a2c;font-weight:900;font-size:19px;box-shadow:0 8px 28px #58e0c022}.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:800}.brand-name{font-size:18px;font-weight:800;letter-spacing:-.03em}.prototype-pill{border:1px solid #35506d;background:#14243b;color:#b9cee7;padding:8px 11px;border-radius:999px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;white-space:nowrap}
+    .hero{display:flex;justify-content:space-between;gap:24px;align-items:flex-end;margin:0 0 22px}.hero h1{font-size:clamp(26px,4vw,38px);line-height:1.12;letter-spacing:-.045em;margin:7px 0 10px;font-weight:800}.hero p{color:#a9b8cc;max-width:700px;line-height:1.6;margin:0;font-size:14px}.mode-switch{display:flex;flex-shrink:0;padding:5px;gap:4px;border:1px solid var(--line);background:#0e192b;border-radius:14px}.mode-btn{border:0;border-radius:10px;padding:11px 13px;background:transparent;color:#99abc1;font-weight:750;font-size:12px;white-space:nowrap}.mode-btn.active{background:#23364f;color:white;box-shadow:inset 0 0 0 1px #405977}.mode-btn.active.usable{background:#153d3c;box-shadow:inset 0 0 0 1px #2c7569;color:#9ff2db}
+    .notice{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;margin-bottom:20px;background:#122b35;border:1px solid #245a5d;color:#bceee5;font-size:12px;line-height:1.5}.notice b{color:#e2fff7}.grid-main{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(320px,.96fr);gap:18px;align-items:start}.stack{display:flex;flex-direction:column;gap:18px}.card{border:1px solid var(--line);background:linear-gradient(160deg,#121f34 0%,#101b2e 100%);border-radius:19px;padding:20px;box-shadow:0 20px 55px #00000012}.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:17px}.card-title{font-weight:800;font-size:15px;letter-spacing:-.02em}.card-sub{color:var(--muted);font-size:12px;line-height:1.45;margin-top:5px}.subtle-label{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#8ea2bc;font-weight:800}.amount{font-size:clamp(30px,4vw,39px);letter-spacing:-.05em;font-weight:850;line-height:1.1;margin:11px 0 4px}.currency{font-size:16px;color:#b9c7db;vertical-align:top;margin-right:4px}.recipient{display:flex;gap:12px;align-items:center;margin-top:17px;padding:13px;border:1px solid #273951;border-radius:13px;background:#0d182a}.avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#253953;color:#cae0ff;font-weight:850}.recipient-name{font-weight:750;font-size:13px}.recipient-detail{color:var(--muted);font-size:11px;margin-top:4px}.spacer{flex:1}.tag{padding:5px 8px;border-radius:8px;font-size:10px;line-height:1.1;font-weight:850;letter-spacing:.03em}.tag.warn{background:#3b3020;color:#ffd58a;border:1px solid #62502c}.tag.good{background:#163a35;color:#8eedd2;border:1px solid #28645a}.tag.blue{background:#1d3150;color:#b9d5ff;border:1px solid #345680}.tag.bad{background:#43272f;color:#ffb3b5;border:1px solid #763c44}
+    .facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.fact{border:1px solid #25364e;border-radius:11px;padding:11px}.fact-label{color:var(--muted);font-size:10px;margin-bottom:5px}.fact-value{font-size:12px;font-weight:750}.divider{height:1px;background:#25354c;margin:17px 0}.risk-top{display:flex;justify-content:space-between;align-items:center;gap:12px}.risk-score{font-size:28px;font-weight:850;letter-spacing:-.05em}.risk-meter{height:8px;background:#24334a;border-radius:999px;overflow:hidden;margin:13px 0 8px}.risk-meter-fill{height:100%;border-radius:999px;transition:width .25s ease,background .25s ease}.meter-scale{display:flex;justify-content:space-between;color:#7f94af;font-size:10px}.reason-list{display:flex;flex-direction:column;gap:12px;margin-top:17px}.reason{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}.reason-name{font-size:12px;font-weight:650}.reason-desc{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4}.impact{font-size:11px;font-weight:850;white-space:nowrap}.impact.up{color:#ffb0a6}.impact.down{color:#80e8c8}.impact.neutral{color:#a2b4cb}
+    .explain-box{border:1px solid #285d58;background:linear-gradient(145deg,#12312f,#132a31);padding:14px;border-radius:13px;margin-top:17px}.explain-head{font-size:12px;font-weight:850;color:#b9f6e4;display:flex;align-items:center;gap:8px}.explain-box p{font-size:12px;line-height:1.55;color:#b3d3d4;margin:8px 0 0}.controls{display:flex;flex-direction:column;gap:15px}.control-row{display:flex;justify-content:space-between;align-items:center;gap:14px}.control-label{font-size:12px;font-weight:700}.control-help{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4}.range-wrap{margin-top:10px}.range-wrap input{width:100%;accent-color:var(--teal);cursor:pointer}.range-value{font-size:12px;font-weight:850;color:#b2ffeb;font-variant-numeric:tabular-nums}.toggle-list{display:grid;grid-template-columns:1fr 1fr;gap:9px}.toggle{position:relative;border:1px solid #2a3c55;border-radius:12px;padding:11px;background:#101c30;display:flex;gap:9px;align-items:flex-start;cursor:pointer;transition:border .15s}.toggle:hover{border-color:#54718f}.toggle input{accent-color:var(--teal);margin-top:3px}.toggle span{font-size:11px;font-weight:700;line-height:1.35}.toggle small{display:block;font-size:10px;color:var(--muted);font-weight:500;margin-top:4px}.action-row{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}.btn{border-radius:11px;border:1px solid #344b68;background:#1b2b42;color:#ecf5ff;padding:11px 14px;font-size:12px;font-weight:800;transition:transform .12s,background .12s,border .12s}.btn:hover{transform:translateY(-1px);background:#253a56}.btn.primary{background:#67e1c1;color:#08231f;border-color:#67e1c1}.btn.primary:hover{background:#8cf0d5}.btn.blue{background:#83b0ff;color:#0b1a30;border-color:#83b0ff}.btn.ghost{background:transparent}.btn.danger{border-color:#71424c;background:#38232b;color:#ffc7c8}.btn.full{width:100%}.btn:active{transform:translateY(0)}
+    .flow-panel{border:1px solid #344b67;background:#111f34;border-radius:14px;padding:16px;margin-top:16px}.flow-panel.good{border-color:#28695a;background:#112d2c}.flow-panel.warn{border-color:#70582f;background:#2a251c}.flow-panel.bad{border-color:#75414b;background:#2b1e28}.flow-title{font-weight:850;font-size:14px;display:flex;align-items:center;gap:9px}.flow-copy{color:#b5c4d8;font-size:12px;line-height:1.6;margin-top:9px}.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;padding:5px 7px;background:#0b1322;border:1px solid #3a4d65;border-radius:7px;color:#c1d4ec;display:inline-block;margin-top:7px}.code-input{width:100%;margin-top:12px;background:#0b1526;color:white;border:1px solid #3c526e;border-radius:10px;padding:12px;font-size:13px;letter-spacing:.16em}.code-input::placeholder{letter-spacing:normal;color:#7187a2}.small-note{font-size:10px;line-height:1.5;color:#8fa3bc;margin-top:9px}.activity{display:flex;flex-direction:column;gap:11px}.activity-item{display:flex;align-items:flex-start;gap:10px}.activity-dot{width:8px;height:8px;border-radius:50%;background:#5fe1c0;margin-top:5px;flex-shrink:0}.activity-text{font-size:11px;line-height:1.5;color:#c3d0df}.activity-time{font-size:10px;color:#7f94ae;margin-top:3px}.empty{color:#8195ae;font-size:11px;line-height:1.5}.footer{display:flex;justify-content:space-between;gap:16px;border-top:1px solid #1f3047;margin-top:27px;padding-top:16px;color:#7086a2;font-size:10px;line-height:1.6}.success-mark{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#1b4b41;color:#8cf0d5;font-weight:900;font-size:21px;margin-bottom:12px}.section-kicker{color:#6ee5c6;font-size:10px;letter-spacing:.13em;text-transform:uppercase;font-weight:900;margin-bottom:7px}.mobile-label{display:none}
+    @media(max-width:850px){.hero{align-items:flex-start;flex-direction:column}.mode-switch{width:100%}.mode-btn{flex:1}.grid-main{grid-template-columns:1fr}.topbar{margin-bottom:23px}.hero{margin-bottom:18px}}
+    @media(max-width:520px){.shell{padding:17px 12px 30px}.prototype-pill{font-size:9px;padding:7px 8px}.brand-mark{width:37px;height:37px}.brand-name{font-size:16px}.card{padding:15px;border-radius:16px}.facts{gap:8px}.toggle-list{grid-template-columns:1fr}.mode-btn{font-size:11px;padding:10px 5px}.footer{flex-direction:column}.hero h1{font-size:28px}.topbar{gap:10px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const {useState, useMemo} = React;
+
+    // Research prototype only. No network calls, real banking data, biometrics, or real MFA.
+    const DEMO_CODE = "246810";
+    const initialTransaction = {
+      amount: 1480,
+      recipient: "Amara Khan",
+      account: "•••• 3084",
+      reference: "TXN-2048-71",
+      newPayee: true,
+      newDevice: false,
+      unusualLocation: false,
+      rapidActivity: false,
+    };
+
+    // Intentionally simple and inspectable heuristic. This is not a calibrated fraud model.
+    function assessRisk(transaction) {
+      const contributions = [
+        { key: "amount", label: "Transfer amount", detail: transaction.amount > 1000 ? "Above the demo's $1,000 review threshold" : transaction.amount > 500 ? "Above the demo's $500 soft threshold" : "Within the demo's usual amount range", points: transaction.amount > 1000 ? 10 : transaction.amount > 500 ? 5 : 0 },
+        { key: "payee", label: "Recipient history", detail: transaction.newPayee ? "This recipient has not been used before" : "Previously used recipient", points: transaction.newPayee ? 24 : 0 },
+        { key: "device", label: "Device recognition", detail: transaction.newDevice ? "This device has not been recognized" : "Recognized device", points: transaction.newDevice ? 22 : 0 },
+        { key: "location", label: "Location pattern", detail: transaction.unusualLocation ? "Sign-in location differs from the usual pattern" : "Location looks familiar", points: transaction.unusualLocation ? 18 : 0 },
+        { key: "velocity", label: "Recent activity", detail: transaction.rapidActivity ? "Several transfers were attempted in a short period" : "No unusual transfer burst detected", points: transaction.rapidActivity ? 14 : 0 },
+      ];
+      const score = Math.max(0, Math.min(100, 8 + contributions.reduce((sum, item) => sum + item.points, 0)));
+      const level = score < 25 ? "low" : score < 55 ? "medium" : "high";
+      const action = level === "low" ? "Confirm transfer" : level === "medium" ? "Confirm on this device" : "Verify identity";
+      return { score, level, action, contributions };
+    }
+
+    function App() {
+      const [mode, setMode] = useState("usable");
+      const [tx, setTx] = useState({...initialTransaction});
+      const [stage, setStage] = useState("ready");
+      const [code, setCode] = useState("");
+      const [error, setError] = useState("");
+      const [events, setEvents] = useState([{ id: 1, text: "Demo workspace opened. No real transaction has been created.", time: "Just now" }]);
+      const risk = useMemo(() => assessRisk(tx), [tx]);
+      const addEvent = (text) => setEvents(old => [{id: Date.now() + Math.random(), text, time: "Just now"}, ...old].slice(0, 5));
+      // HCI: changing scenario data resets the active step, preventing stale status from misleading users.
+      const update = (key, value) => {
+        setTx(old => ({...old, [key]: value}));
+        if (stage !== "ready") { setStage("ready"); setCode(""); setError(""); }
+      };
+      const resetFlow = () => { setStage("ready"); setCode(""); setError(""); };
+      const resetDemo = () => {
+        setMode("usable"); setTx({...initialTransaction}); resetFlow();
+        setEvents([{id: Date.now(), text: "Demo reset. Ready to compare authorization experiences.", time: "Just now"}]);
+      };
+      // HCI: the two modes share the scenario but deliberately differ in explanation, proportionality, and recovery.
+      const openAuthorization = () => {
+        setError(""); setCode("");
+        if (mode === "traditional") {
+          setStage("traditional-mfa");
+          addEvent("Traditional flow: fixed MFA challenge shown for this transfer.");
+        } else if (risk.level === "low") {
+          setStage("confirm"); addEvent("Adaptive flow: low-risk transfer moved to a clear confirmation step.");
+        } else if (risk.level === "medium") {
+          setStage("adaptive-confirm"); addEvent("Adaptive flow: step-up confirmation shown with a reason.");
+        } else {
+          setStage("adaptive-mfa"); addEvent("Adaptive flow: higher-risk context requires additional verification.");
+        }
+      };
+      const approve = () => {
+        setStage("success"); setError("");
+        addEvent("Simulation completed: authorization approved by demo interaction; no money moved.");
+      };
+      const verifyCode = () => {
+        if (code.trim() === DEMO_CODE) { approve(); return; }
+        if (mode === "traditional") {
+          setError("ERR_SEC_9942 — Authentication failed. Contact support.");
+          addEvent("Traditional flow: opaque verification error shown.");
+        } else {
+          setError("That code did not match. Check the demo code or choose another recovery option.");
+          addEvent("Adaptive flow: verification error shown with recovery guidance.");
+        }
+      };
+      const beginReview = () => {
+        setStage("review"); setError("");
+        addEvent("Transfer paused. A human review has been simulated; no real bank team was contacted.");
+      };
+      const cancelTransfer = () => {
+        setStage("cancelled"); setError("");
+        addEvent("User cancelled the simulated transfer before authorization.");
+      };
+      const money = new Intl.NumberFormat("en-US", {style:"currency",currency:"USD",maximumFractionDigits:2}).format(tx.amount);
+      const levelColor = risk.level === "low" ? "var(--teal)" : risk.level === "medium" ? "var(--amber)" : "var(--red)";
+      const levelLabel = risk.level === "low" ? "Lower risk" : risk.level === "medium" ? "Elevated risk" : "High risk";
+
+      // HCI: visible status, plain-language recovery, and a user-controlled cancel/review path are explicit here.
+      const renderWorkflow = () => {
+        if (stage === "ready") return <div className="flow-panel">
+          <div className="flow-title"><span aria-hidden="true">↗</span> Authorization preview</div>
+          <div className="flow-copy">{mode === "traditional" ? "A fixed security challenge will appear before every transfer. The interface does not explain why this particular action needs the check." : risk.level === "low" ? "This scenario is below the demo's step-up threshold. You will see the recipient and amount again before confirming." : risk.level === "medium" ? "The new recipient or transfer context calls for an extra confirmation. The next step will explain the trigger and offer a clear path forward." : "Several risk signals are present. The demo will ask for additional verification and give you an option to pause and request human review."}</div>
+          <div className="action-row"><button className={`btn ${mode === "usable" ? "primary" : "blue"}`} onClick={openAuthorization}>{mode === "traditional" ? "Continue" : "Review security step"} <span aria-hidden="true">→</span></button><button className="btn ghost" onClick={cancelTransfer}>Cancel transfer</button></div>
+        </div>;
+
+        if (stage === "traditional-mfa") return <div className="flow-panel warn" role="region" aria-label="Traditional MFA challenge">
+          <div className="flow-title"><span aria-hidden="true">▣</span> Additional security verification required</div>
+          <div className="flow-copy">For your security, complete the required verification. If you cannot continue, contact support.</div>
+          <span className="code">ERR_SEC_9942</span>
+          <label className="block text-xs font-semibold mt-3" htmlFor="traditional-code">Security code</label>
+          <input id="traditional-code" className="code-input" value={code} onChange={e=>setCode(e.target.value)} placeholder="Enter 6-digit code" inputMode="numeric" autoComplete="one-time-code" maxLength="6" />
+          {error && <div className="flow-panel bad" role="alert" style={{marginTop:10,padding:11}}><div className="flow-copy" style={{margin:0,color:"#ffc5c8"}}>{error}</div></div>}
+          <div className="action-row"><button className="btn blue" onClick={verifyCode}>Verify and continue</button><button className="btn ghost" onClick={cancelTransfer}>Cancel</button></div>
+          <div className="small-note">Prototype only: use demo code <b>246810</b>. Never use real banking credentials here.</div>
+        </div>;
+
+        if (stage === "confirm") return <div className="flow-panel good" role="region" aria-label="Transfer confirmation">
+          <div className="flow-title"><span aria-hidden="true">✓</span> Check the details before sending</div>
+          <div className="flow-copy">The context currently falls in the demo's lower-risk band. Confirm the amount and recipient below. You can still cancel.</div>
+          <div className="facts"><div className="fact"><div className="fact-label">You are sending</div><div className="fact-value">{money}</div></div><div className="fact"><div className="fact-label">Recipient</div><div className="fact-value">{tx.recipient}</div></div></div>
+          <div className="action-row"><button className="btn primary" onClick={approve}>Confirm transfer</button><button className="btn ghost" onClick={cancelTransfer}>Cancel transfer</button></div>
+        </div>;
+
+        if (stage === "adaptive-confirm") return <div className="flow-panel good" role="region" aria-label="Adaptive confirmation">
+          <div className="flow-title"><span aria-hidden="true">◇</span> Confirm on this device</div>
+          <div className="flow-copy">We noticed <b>{tx.newPayee ? "this is a new recipient" : tx.newDevice ? "this device is new" : "a change in this transfer's context"}</b>. Confirm that you initiated this transfer. This additional step helps protect transfers when context looks less familiar.</div>
+          <div className="action-row"><button className="btn primary" onClick={approve}>Approve this transfer</button><button className="btn" onClick={()=>{setStage("adaptive-code");setCode("");setError("");}}>Use a demo code instead</button><button className="btn ghost" onClick={cancelTransfer}>Cancel transfer</button></div>
+        </div>;
+
+        if (stage === "adaptive-mfa" || stage === "adaptive-code") return <div className="flow-panel warn" role="region" aria-label="Risk-based verification">
+          <div className="flow-title"><span aria-hidden="true">⚿</span> Additional verification needed</div>
+          <div className="flow-copy">This transfer has a <b>{risk.level}-risk</b> context in the prototype (score {risk.score}/100). Signals: {risk.contributions.filter(x=>x.points>0).map(x=>x.label.toLowerCase()).join(", ") || "combined transaction context"}. To continue, verify with the simulated one-time code, or pause the transfer for human review.</div>
+          <label className="block text-xs font-semibold mt-3" htmlFor="adaptive-code">One-time verification code</label>
+          <input id="adaptive-code" className="code-input" value={code} onChange={e=>setCode(e.target.value)} placeholder="Enter 6-digit demo code" inputMode="numeric" autoComplete="one-time-code" maxLength="6" />
+          {error && <div className="flow-panel bad" role="alert" style={{marginTop:10,padding:11}}><div className="flow-copy" style={{margin:0,color:"#ffc5c8"}}>{error}</div></div>}
+          <div className="action-row"><button className="btn primary" onClick={verifyCode}>Verify and continue</button><button className="btn" onClick={beginReview}>Pause for human review</button><button className="btn ghost" onClick={cancelTransfer}>Cancel transfer</button></div>
+          <div className="small-note">Prototype only: use demo code <b>246810</b>. This is not a real OTP or authentication system.</div>
+        </div>;
+
+        if (stage === "review") return <div className="flow-panel warn" role="status"><div className="flow-title"><span aria-hidden="true">◷</span> Transfer paused for review</div><div className="flow-copy">Your transfer has not been sent. In a real banking service, this step would create a review case and explain when and how you can expect a response. This prototype only records the state locally.</div><div className="action-row"><button className="btn" onClick={resetFlow}>Return to transaction</button><button className="btn ghost" onClick={cancelTransfer}>Cancel transfer</button></div></div>;
+
+        if (stage === "success") return <div className="flow-panel good" role="status"><div className="success-mark" aria-hidden="true">✓</div><div className="section-kicker">Demo outcome</div><div className="flow-title">Authorization simulated successfully</div><div className="flow-copy">The prototype accepted the confirmation for {money} to {tx.recipient}. <b>No money was moved, no bank service was contacted, and no real identity was verified.</b></div><div className="action-row"><button className="btn primary" onClick={resetFlow}>Try another scenario</button><button className="btn ghost" onClick={resetDemo}>Reset full demo</button></div></div>;
+
+        return <div className="flow-panel" role="status"><div className="flow-title">Transfer cancelled</div><div className="flow-copy">You left the authorization flow before confirming. No transfer was made.</div><div className="action-row"><button className="btn primary" onClick={resetFlow}>Return to transaction</button><button className="btn ghost" onClick={resetDemo}>Reset demo</button></div></div>;
+      };
+
+      return <div className="shell">
+        <header className="topbar">
+          <div className="brand"><div className="brand-mark" aria-hidden="true">C</div><div><div className="brand-name">ClearGate <span style={{color:"#6f8cab",fontWeight:500}}> / banking security lab</span></div><div className="eyebrow" style={{marginTop:3}}>Usable security · HCI portfolio prototype</div></div></div>
+          <div className="prototype-pill">● Simulation only</div>
+        </header>
+
+        <section className="hero">
+          <div><div className="eyebrow">Authorization experience comparison</div><h1>Security should protect people,<br className="hidden sm:block"/> not confuse them.</h1><p>Compare a rigid, opaque authorization flow with a risk-adaptive experience that explains the security step, guides recovery, and keeps the user in control.</p></div>
+          <div className="mode-switch" role="group" aria-label="Choose authorization experience">
+            <button className={`mode-btn ${mode === "traditional" ? "active" : ""}`} onClick={()=>{setMode("traditional");resetFlow();addEvent("Traditional banking interface selected.");}}>Traditional UX</button>
+            <button className={`mode-btn ${mode === "usable" ? "active usable" : ""}`} onClick={()=>{setMode("usable");resetFlow();addEvent("Usable security interface selected.");}}>Usable Security UX</button>
+          </div>
+        </section>
+
+        <div className="notice" role="note"><span aria-hidden="true" style={{fontSize:17}}>ⓘ</span><div><b>Safe research prototype.</b> This app uses synthetic transaction details and a transparent demonstration rule set. It does not connect to a bank, assess real fraud, store credentials, or perform authentication. Risk thresholds are illustrative, not calibrated for financial use.</div></div>
+
+        <main className="grid-main">
+          <div className="stack">
+            <section className="card" aria-labelledby="transaction-title">
+              <div className="card-head"><div><div className="subtle-label">Transfer request</div><div className="card-title" id="transaction-title" style={{marginTop:6}}>Review transaction</div><div className="card-sub">Check who is receiving the money and the amount before authorizing.</div></div><span className="tag blue">{tx.reference}</span></div>
+              <div className="subtle-label">Transfer amount</div><div className="amount"><span className="currency">USD</span>{Number(tx.amount).toLocaleString("en-US")}.00</div><div className="card-sub">From: Everyday current account · •••• 4412</div>
+              <div className="recipient"><div className="avatar" aria-hidden="true">AK</div><div><div className="recipient-name">{tx.recipient}</div><div className="recipient-detail">{tx.account} · Personal account</div></div><div className="spacer"></div><span className={`tag ${tx.newPayee ? "warn" : "good"}`}>{tx.newPayee ? "NEW PAYEE" : "SAVED PAYEE"}</span></div>
+              <div className="facts"><div className="fact"><div className="fact-label">Transfer type</div><div className="fact-value">One-time bank transfer</div></div><div className="fact"><div className="fact-label">Requested by</div><div className="fact-value">Umar · Demo profile</div></div><div className="fact"><div className="fact-label">Transaction ID</div><div className="fact-value">{tx.reference}</div></div><div className="fact"><div className="fact-label">Authorization status</div><div className="fact-value" style={{color:stage === "success" ? "var(--teal)" : stage === "review" ? "var(--amber)" : "#d4e3f5"}}>{stage === "success" ? "Simulated approval" : stage === "review" ? "Paused for review" : stage === "cancelled" ? "Cancelled" : "Awaiting confirmation"}</div></div></div>
+            </section>
+
+            <section className="card" aria-labelledby="context-title">
+              <div className="card-head"><div><div className="subtle-label">Scenario controls</div><div className="card-title" id="context-title" style={{marginTop:6}}>Change transaction context</div><div className="card-sub">Toggle synthetic signals to see how the security response adapts. These are test controls, not detected facts.</div></div><span className="tag blue">Interactive</span></div>
+              <div className="controls">
+                <div><div className="control-row"><label className="control-label" htmlFor="amount-range">Transfer amount</label><output className="range-value" htmlFor="amount-range">{money}</output></div><div className="range-wrap"><input id="amount-range" type="range" min="50" max="5000" step="50" value={tx.amount} onChange={e=>update("amount", Number(e.target.value))} aria-describedby="amount-help" /></div><div className="control-row" style={{marginTop:5}}><span className="control-help" id="amount-help">$50</span><span className="control-help">$5,000</span></div></div>
+                <div className="toggle-list">
+                  <label className="toggle"><input type="checkbox" checked={tx.newPayee} onChange={e=>update("newPayee",e.target.checked)} /><span>New recipient<small>First transfer to this payee</small></span></label>
+                  <label className="toggle"><input type="checkbox" checked={tx.newDevice} onChange={e=>update("newDevice",e.target.checked)} /><span>Unrecognized device<small>Device is not in the trusted list</small></span></label>
+                  <label className="toggle"><input type="checkbox" checked={tx.unusualLocation} onChange={e=>update("unusualLocation",e.target.checked)} /><span>Unusual location<small>Different from usual sign-in context</small></span></label>
+                  <label className="toggle"><input type="checkbox" checked={tx.rapidActivity} onChange={e=>update("rapidActivity",e.target.checked)} /><span>Rapid activity<small>Several recent transfer attempts</small></span></label>
+                </div>
+              </div>
+              {mode === "usable" ? <div className="explain-box"><div className="explain-head"><span aria-hidden="true">✦</span> Why the interface may add a check</div><p>{risk.level === "low" ? "No strong warning signals are active in this scenario. The prototype keeps the path simple and still asks you to review the payee and amount before confirming." : risk.level === "medium" ? "At least one unfamiliar signal is active. The prototype asks for an additional confirmation and tells you which context prompted it, rather than showing a generic block." : "Multiple signals are active at once. The prototype requires a simulated verification step and offers a pause-for-human-review option instead of leaving you at a dead end."}</p></div> : <div className="flow-panel" style={{marginTop:16}}><div className="flow-title"><span aria-hidden="true">▣</span> Security check triggered</div><div className="flow-copy">The traditional variant uses the same fixed MFA requirement regardless of the selected context. It does not disclose the scoring rationale.</div></div>}
+              <div className="action-row"><button className="btn ghost" onClick={resetDemo}>Reset scenario</button><span className="small-note" style={{marginTop:0,alignSelf:"center"}}>Changing context resets the current authorization step.</span></div>
+            </section>
+          </div>
+
+          <div className="stack">
+            {mode === "usable" ? <section className="card" aria-labelledby="risk-title">
+              <div className="card-head"><div><div className="subtle-label">Transparent risk feedback</div><div className="card-title" id="risk-title" style={{marginTop:6}}>What is influencing the check?</div><div className="card-sub">A demonstration score makes the decision logic inspectable.</div></div><span className={`tag ${risk.level === "low" ? "good" : risk.level === "medium" ? "warn" : "bad"}`}>{levelLabel}</span></div>
+              <div className="risk-top"><div><div className="subtle-label">Illustrative risk score</div><div className="risk-score" style={{color:levelColor}}>{risk.score}<span style={{fontSize:13,color:"#7890ad",fontWeight:650}}>/100</span></div></div><div style={{textAlign:"right"}}><div className="subtle-label">Next step</div><div style={{fontWeight:800,fontSize:12,marginTop:6}}>{risk.action}</div></div></div>
+              <div className="risk-meter" aria-label={`Illustrative risk score ${risk.score} out of 100`}><div className="risk-meter-fill" style={{width:`${risk.score}%`,background:levelColor}}></div></div><div className="meter-scale"><span>Lower</span><span>Elevated</span><span>Higher</span></div>
+              <div className="reason-list">{risk.contributions.map(item=><div className="reason" key={item.key}><div><div className="reason-name">{item.label}</div><div className="reason-desc">{item.detail}</div></div><div className={`impact ${item.points > 0 ? "up" : "neutral"}`}>{item.points > 0 ? `+${item.points} pts` : "No added risk"}</div></div>)}</div>
+              <div className="small-note">The score is a hand-coded heuristic (starting at 8, then adding visible points). It is not machine learning, a probability of fraud, or a production policy.</div>
+            </section> : <section className="card" aria-labelledby="opaque-title"><div className="card-head"><div><div className="subtle-label">Traditional experience</div><div className="card-title" id="opaque-title" style={{marginTop:6}}>Security decision</div><div className="card-sub">A representative opaque UI state. Detailed risk reasons are intentionally withheld in this variant.</div></div><span className="tag warn">Action blocked</span></div><div className="flow-panel warn" style={{marginTop:0}}><div className="flow-title"><span aria-hidden="true">▣</span> Security verification required</div><div className="flow-copy">Your transaction requires additional authentication.</div><span className="code">ERR_SEC_9942</span><div className="small-note">No explanation of the triggering signal or recovery path is provided at this stage.</div></div><div className="divider"></div><div className="card-sub">Comparison focus: fixed checks, technical language, and limited recovery versus explicit reasons and proportionate steps.</div></section>}
+
+            <section className="card" aria-labelledby="workflow-title"><div className="card-head"><div><div className="subtle-label">Authorization journey</div><div className="card-title" id="workflow-title" style={{marginTop:6}}>Continue safely</div><div className="card-sub">Progress through a simulated flow. You can always cancel before approval.</div></div><span className="tag blue">{mode === "usable" ? "Risk-adaptive" : "Fixed MFA"}</span></div>{renderWorkflow()}</section>
+
+            <section className="card" aria-labelledby="activity-title"><div className="card-head"><div><div className="card-title" id="activity-title">Session activity</div><div className="card-sub">Visible feedback helps users understand what changed and why.</div></div><span className="tag good">Local only</span></div><div className="activity">{events.map(ev=><div className="activity-item" key={ev.id}><div className="activity-dot" aria-hidden="true"></div><div><div className="activity-text">{ev.text}</div><div className="activity-time">{ev.time}</div></div></div>)}</div></section>
+          </div>
+        </main>
+        <footer className="footer"><span>ClearGate · HCI / Usable Security research prototype · Version 1.0</span><span>Illustrative data and behavior only. Do not enter real banking information.</span></footer>
+      </div>;
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
